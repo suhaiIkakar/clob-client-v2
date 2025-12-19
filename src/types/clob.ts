@@ -1,8 +1,6 @@
-import type { SignatureType, SignedOrder } from "@polymarket/order-utils";
-import type { AxiosRequestHeaders } from "axios";
-import { SignatureTypeV1, SignatureTypeV2, SignedOrderV2 } from "./order-utils";
+import { Side } from "../order-utils/model/side";
 
-export { Side } from "./order-utils/model/side";
+export { Side };
 
 export interface ApiKeyCreds {
 	key: string;
@@ -22,8 +20,10 @@ export interface L2HeaderArgs {
 	body?: string;
 }
 
+export type SimpleHeaders = Record<string, string | number | boolean>;
+
 // EIP712 sig verification
-export interface L1PolyHeader extends AxiosRequestHeaders {
+export interface L1PolyHeader extends SimpleHeaders {
 	POLY_ADDRESS: string;
 	POLY_SIGNATURE: string;
 	POLY_TIMESTAMP: string;
@@ -31,7 +31,7 @@ export interface L1PolyHeader extends AxiosRequestHeaders {
 }
 
 // API key verification
-export interface L2PolyHeader extends AxiosRequestHeaders {
+export interface L2PolyHeader extends SimpleHeaders {
 	POLY_ADDRESS: string;
 	POLY_SIGNATURE: string;
 	POLY_TIMESTAMP: string;
@@ -54,155 +54,8 @@ export enum OrderType {
 	FAK = "FAK",
 }
 
-export interface PostOrdersV2Args {
-	order: SignedOrderV2;
-	orderType: OrderType;
-}
-
-export interface NewOrderV1<T extends OrderType> {
-	readonly order: {
-		readonly salt: number;
-		readonly maker: string;
-		readonly signer: string;
-		readonly taker: string;
-		readonly tokenId: string;
-		readonly makerAmount: string;
-		readonly takerAmount: string;
-		readonly expiration: string;
-		readonly nonce: string;
-		readonly feeRateBps: string;
-		readonly side: Side; // string
-		readonly signatureType: SignatureTypeV1;
-		readonly signature: string;
-	};
-	readonly owner: string;
-	readonly orderType: T;
-	readonly deferExec: boolean;
-}
-
-export interface NewOrderV2<T extends OrderType> {
-	readonly order: {
-		readonly salt: number;
-		readonly maker: string;
-		readonly signer: string;
-		readonly taker: string;
-		readonly tokenId: string;
-		readonly makerAmount: string;
-		readonly takerAmount: string;
-		readonly expiration: string;
-		readonly maxFee: string;
-		readonly side: Side; // string
-		readonly signatureType: SignatureTypeV2;
-		readonly timestamp: string;
-		readonly metadata: string;
-		readonly builder: string;
-		readonly signature: string;
-	};
-	readonly owner: string;
-	readonly orderType: T;
-	readonly deferExec: boolean;
-}
-
-// Simplified order for users
-export interface UserOrder {
-	/**
-	 * TokenID of the Conditional token asset being traded
-	 */
-	tokenID: string;
-
-	/**
-	 * Price used to create the order
-	 */
-	price: number;
-
-	/**
-	 * Size in terms of the ConditionalToken
-	 */
-	size: number;
-
-	/**
-	 * Side of the order
-	 */
-	side: Side;
-
-	/**
-	 * Fee rate, in basis points, charged to the order maker, charged on proceeds
-	 */
-	feeRateBps?: number;
-
-	/**
-	 * Nonce used for onchain cancellations
-	 */
-	nonce?: number;
-
-	/**
-	 * Timestamp after which the order is expired.
-	 */
-	expiration?: number;
-
-	/**
-	 * Address of the order taker. The zero address is used to indicate a public order
-	 */
-	taker?: string;
-}
-
-// Simplified market order for users
-export interface UserMarketOrder {
-	/**
-	 * TokenID of the Conditional token asset being traded
-	 */
-	tokenID: string;
-
-	/**
-	 * Price used to create the order
-	 * If it is not present the market price will be used.
-	 */
-	price?: number;
-
-	/**
-	 * BUY orders: $$$ Amount to buy
-	 * SELL orders: Shares to sell
-	 */
-	amount: number;
-
-	/**
-	 * Side of the order
-	 */
-	side: Side;
-
-	/**
-	 * Fee rate, in basis points, charged to the order maker, charged on proceeds
-	 */
-	feeRateBps?: number;
-
-	/**
-	 * Nonce used for onchain cancellations
-	 */
-	nonce?: number;
-
-	/**
-	 * Address of the order taker. The zero address is used to indicate a public order
-	 */
-	taker?: string;
-
-	/**
-	 * Specifies the type of order execution:
-	 * - FOK (Fill or Kill): The order must be filled entirely or not at all.
-	 * - FAK (Fill and Kill): The order can be partially filled, and any unfilled portion is canceled.
-	 */
-	orderType?: OrderType.FOK | OrderType.FAK;
-}
-
 export interface OrderPayload {
 	orderID: string;
-}
-
-export interface ApiKeysResponse {
-	apiKeys: ApiKeyCreds[];
-}
-
-export interface BanStatus {
-	closed_only: boolean;
 }
 
 export interface OrderResponse {
@@ -234,21 +87,6 @@ export interface OpenOrder {
 }
 
 export type OpenOrdersResponse = OpenOrder[];
-
-export interface TradeParams {
-	id?: string;
-	maker_address?: string;
-	market?: string;
-	asset_id?: string;
-	before?: string;
-	after?: string;
-}
-
-export interface OpenOrderParams {
-	id?: string;
-	market?: string;
-	asset_id?: string;
-}
 
 export interface MakerOrder {
 	order_id: string;
@@ -283,6 +121,29 @@ export interface Trade {
 	maker_orders: MakerOrder[];
 	transaction_hash: string;
 	trader_side: "TAKER" | "MAKER";
+}
+
+export interface ApiKeysResponse {
+	apiKeys: ApiKeyCreds[];
+}
+
+export interface BanStatus {
+	closed_only: boolean;
+}
+
+export interface TradeParams {
+	id?: string;
+	maker_address?: string;
+	market?: string;
+	asset_id?: string;
+	before?: string;
+	after?: string;
+}
+
+export interface OpenOrderParams {
+	id?: string;
+	market?: string;
+	asset_id?: string;
 }
 
 export enum Chain {

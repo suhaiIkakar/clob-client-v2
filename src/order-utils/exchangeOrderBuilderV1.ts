@@ -1,20 +1,14 @@
 import type { JsonRpcSigner } from "@ethersproject/providers";
 import type { Wallet } from "@ethersproject/wallet";
 import { hashTypedData } from "viem";
-
-import { EIP712_DOMAIN, type EIP712TypedData } from "./model/eip712";
 import {
 	CTF_EXCHANGE_V1_DOMAIN_NAME,
 	CTF_EXCHANGE_V1_DOMAIN_VERSION,
 	CTF_EXCHANGE_V1_ORDER_STRUCT,
 } from "./model/ctfExchangeV1TypedData";
-import type {
-	OrderV1,
-	OrderDataV1,
-	OrderHash,
-	OrderSignature,
-	SignedOrderV1,
-} from "./model/orderDataV1.js";
+import { EIP712_DOMAIN, type EIP712TypedData } from "./model/eip712";
+import type { OrderHash, OrderSignature } from "./model/order";
+import type { OrderDataV1, OrderV1, SignedOrderV1 } from "./model/orderDataV1.js";
 import { SignatureTypeV1 } from "./model/signatureTypeV1.js";
 import { generateOrderSalt } from "./utils";
 
@@ -136,11 +130,7 @@ export class ExchangeOrderBuilderV1 {
 	 */
 	buildOrderSignature(typedData: EIP712TypedData): Promise<OrderSignature> {
 		delete typedData.types.EIP712Domain;
-		return this.signer._signTypedData(
-			typedData.domain,
-			typedData.types,
-			typedData.message,
-		);
+		return this.signer._signTypedData(typedData.domain, typedData.types, typedData.message);
 	}
 
 	/**

@@ -1,8 +1,8 @@
-import { describe, it, expect } from "vitest";
-
-import { UserOrder, Side } from "../../../src/types";
+import { describe, expect, it } from "vitest";
+import { bytes32Zero } from "../../../src/constants";
 import { buildOrderCreationArgs, ROUNDING_CONFIG } from "../../../src/order-builder/helpers";
-import { OrderDataV2, SignatureTypeV2 } from "../../../src/order-utils";
+import { type OrderDataV2, SignatureTypeV2 } from "../../../src/order-utils";
+import { Side, type UserOrder } from "../../../src/types";
 
 describe("buildOrderCreationArgs", () => {
 	describe("buy order", () => {
@@ -12,8 +12,6 @@ describe("buildOrderCreationArgs", () => {
 				price: 0.5,
 				size: 21.04,
 				side: Side.BUY,
-				feeRateBps: 111,
-				nonce: 123,
 				expiration: 50000,
 			};
 			const orderData: OrderDataV2 = await buildOrderCreationArgs(
@@ -23,19 +21,18 @@ describe("buildOrderCreationArgs", () => {
 				order,
 				ROUNDING_CONFIG["0.1"],
 			);
-			expect(orderData).toEqual({
-				maker: "0x0000000000000000000000000000000000000002",
-				taker: "0x0000000000000000000000000000000000000000",
-				tokenId: "123",
-				makerAmount: "10520000",
-				takerAmount: "21040000",
-				side: Side.BUY,
-				feeRateBps: "111",
-				nonce: "123",
-				signer: "0x0000000000000000000000000000000000000001",
-				expiration: "50000",
-				signatureType: SignatureTypeV2.EOA,
-			});
+			expect(orderData.maker).toBe("0x0000000000000000000000000000000000000002");
+			expect(orderData.signer).toBe("0x0000000000000000000000000000000000000001");
+			expect(orderData.tokenId).toBe("123");
+			expect(orderData.makerAmount).toBe("10520000");
+			expect(orderData.takerAmount).toBe("21040000");
+			expect(orderData.side).toBe(Side.BUY);
+			expect(orderData.expiration).toBe("50000");
+			expect(orderData.maxFee).toBe("0");
+			expect(orderData.timestamp).toBeDefined();
+			expect(orderData.builder).toBe(bytes32Zero);
+			expect(orderData.metadata).toBe(bytes32Zero);
+			expect(orderData.signatureType).toBe(SignatureTypeV2.EOA);
 		});
 
 		it("0.01", async () => {
@@ -44,8 +41,6 @@ describe("buildOrderCreationArgs", () => {
 				price: 0.56,
 				size: 21.04,
 				side: Side.BUY,
-				feeRateBps: 111,
-				nonce: 123,
 				expiration: 50000,
 			};
 			const orderData: OrderDataV2 = await buildOrderCreationArgs(
@@ -55,19 +50,18 @@ describe("buildOrderCreationArgs", () => {
 				order,
 				ROUNDING_CONFIG["0.01"],
 			);
-			expect(orderData).toEqual({
-				maker: "0x0000000000000000000000000000000000000002",
-				taker: "0x0000000000000000000000000000000000000000",
-				tokenId: "123",
-				makerAmount: "11782400",
-				takerAmount: "21040000",
-				side: Side.BUY,
-				feeRateBps: "111",
-				nonce: "123",
-				signer: "0x0000000000000000000000000000000000000001",
-				expiration: "50000",
-				signatureType: SignatureTypeV2.EOA,
-			});
+			expect(orderData.maker).toBe("0x0000000000000000000000000000000000000002");
+			expect(orderData.signer).toBe("0x0000000000000000000000000000000000000001");
+			expect(orderData.tokenId).toBe("123");
+			expect(orderData.makerAmount).toBe("11782400");
+			expect(orderData.takerAmount).toBe("21040000");
+			expect(orderData.side).toBe(Side.BUY);
+			expect(orderData.expiration).toBe("50000");
+			expect(orderData.maxFee).toBe("0");
+			expect(orderData.timestamp).toBeDefined();
+			expect(orderData.builder).toBe(bytes32Zero);
+			expect(orderData.metadata).toBe(bytes32Zero);
+			expect(orderData.signatureType).toBe(SignatureTypeV2.EOA);
 		});
 
 		it("0.001", async () => {
@@ -76,8 +70,6 @@ describe("buildOrderCreationArgs", () => {
 				price: 0.056,
 				size: 21.04,
 				side: Side.BUY,
-				feeRateBps: 111,
-				nonce: 123,
 				expiration: 50000,
 			};
 			const orderData: OrderDataV2 = await buildOrderCreationArgs(
@@ -87,19 +79,18 @@ describe("buildOrderCreationArgs", () => {
 				order,
 				ROUNDING_CONFIG["0.001"],
 			);
-			expect(orderData).toEqual({
-				maker: "0x0000000000000000000000000000000000000002",
-				taker: "0x0000000000000000000000000000000000000000",
-				tokenId: "123",
-				makerAmount: "1178240",
-				takerAmount: "21040000",
-				side: Side.BUY,
-				feeRateBps: "111",
-				nonce: "123",
-				signer: "0x0000000000000000000000000000000000000001",
-				expiration: "50000",
-				signatureType: SignatureTypeV2.EOA,
-			});
+			expect(orderData.maker).toBe("0x0000000000000000000000000000000000000002");
+			expect(orderData.signer).toBe("0x0000000000000000000000000000000000000001");
+			expect(orderData.tokenId).toBe("123");
+			expect(orderData.makerAmount).toBe("1178240");
+			expect(orderData.takerAmount).toBe("21040000");
+			expect(orderData.side).toBe(Side.BUY);
+			expect(orderData.expiration).toBe("50000");
+			expect(orderData.maxFee).toBe("0");
+			expect(orderData.timestamp).toBeDefined();
+			expect(orderData.builder).toBe(bytes32Zero);
+			expect(orderData.metadata).toBe(bytes32Zero);
+			expect(orderData.signatureType).toBe(SignatureTypeV2.EOA);
 		});
 
 		it("0.0001", async () => {
@@ -108,8 +99,6 @@ describe("buildOrderCreationArgs", () => {
 				price: 0.0056,
 				size: 21.04,
 				side: Side.BUY,
-				feeRateBps: 111,
-				nonce: 123,
 				expiration: 50000,
 			};
 			const orderData: OrderDataV2 = await buildOrderCreationArgs(
@@ -119,19 +108,18 @@ describe("buildOrderCreationArgs", () => {
 				order,
 				ROUNDING_CONFIG["0.0001"],
 			);
-			expect(orderData).toEqual({
-				maker: "0x0000000000000000000000000000000000000002",
-				taker: "0x0000000000000000000000000000000000000000",
-				tokenId: "123",
-				makerAmount: "117824",
-				takerAmount: "21040000",
-				side: Side.BUY,
-				feeRateBps: "111",
-				nonce: "123",
-				signer: "0x0000000000000000000000000000000000000001",
-				expiration: "50000",
-				signatureType: SignatureTypeV2.EOA,
-			});
+			expect(orderData.maker).toBe("0x0000000000000000000000000000000000000002");
+			expect(orderData.signer).toBe("0x0000000000000000000000000000000000000001");
+			expect(orderData.tokenId).toBe("123");
+			expect(orderData.makerAmount).toBe("117824");
+			expect(orderData.takerAmount).toBe("21040000");
+			expect(orderData.side).toBe(Side.BUY);
+			expect(orderData.expiration).toBe("50000");
+			expect(orderData.maxFee).toBe("0");
+			expect(orderData.timestamp).toBeDefined();
+			expect(orderData.builder).toBe(bytes32Zero);
+			expect(orderData.metadata).toBe(bytes32Zero);
+			expect(orderData.signatureType).toBe(SignatureTypeV2.EOA);
 		});
 	});
 
@@ -142,9 +130,6 @@ describe("buildOrderCreationArgs", () => {
 				price: 0.5,
 				size: 21.04,
 				side: Side.SELL,
-				feeRateBps: 0,
-				nonce: 0,
-				taker: "0x000000000000000000000000000000000000000A",
 			};
 			const orderData: OrderDataV2 = await buildOrderCreationArgs(
 				"0x0000000000000000000000000000000000000001",
@@ -153,19 +138,18 @@ describe("buildOrderCreationArgs", () => {
 				order,
 				ROUNDING_CONFIG["0.1"],
 			);
-			expect(orderData).toEqual({
-				maker: "0x0000000000000000000000000000000000000002",
-				taker: "0x000000000000000000000000000000000000000A",
-				tokenId: "5",
-				takerAmount: "10520000",
-				makerAmount: "21040000",
-				side: Side.SELL,
-				feeRateBps: "0",
-				nonce: "0",
-				signer: "0x0000000000000000000000000000000000000001",
-				expiration: "0",
-				signatureType: SignatureTypeV2.POLY_PROXY,
-			});
+			expect(orderData.maker).toBe("0x0000000000000000000000000000000000000002");
+			expect(orderData.signer).toBe("0x0000000000000000000000000000000000000001");
+			expect(orderData.tokenId).toBe("5");
+			expect(orderData.makerAmount).toBe("21040000");
+			expect(orderData.takerAmount).toBe("10520000");
+			expect(orderData.side).toBe(Side.SELL);
+			expect(orderData.expiration).toBe("0");
+			expect(orderData.maxFee).toBe("0");
+			expect(orderData.timestamp).toBeDefined();
+			expect(orderData.builder).toBe(bytes32Zero);
+			expect(orderData.metadata).toBe(bytes32Zero);
+			expect(orderData.signatureType).toBe(SignatureTypeV2.POLY_PROXY);
 		});
 
 		it("0.01", async () => {
@@ -174,9 +158,6 @@ describe("buildOrderCreationArgs", () => {
 				price: 0.56,
 				size: 21.04,
 				side: Side.SELL,
-				feeRateBps: 0,
-				nonce: 0,
-				taker: "0x000000000000000000000000000000000000000A",
 			};
 			const orderData: OrderDataV2 = await buildOrderCreationArgs(
 				"0x0000000000000000000000000000000000000001",
@@ -185,19 +166,18 @@ describe("buildOrderCreationArgs", () => {
 				order,
 				ROUNDING_CONFIG["0.01"],
 			);
-			expect(orderData).toEqual({
-				maker: "0x0000000000000000000000000000000000000002",
-				taker: "0x000000000000000000000000000000000000000A",
-				tokenId: "5",
-				takerAmount: "11782400",
-				makerAmount: "21040000",
-				side: Side.SELL,
-				feeRateBps: "0",
-				nonce: "0",
-				signer: "0x0000000000000000000000000000000000000001",
-				expiration: "0",
-				signatureType: SignatureTypeV2.POLY_PROXY,
-			});
+			expect(orderData.maker).toBe("0x0000000000000000000000000000000000000002");
+			expect(orderData.signer).toBe("0x0000000000000000000000000000000000000001");
+			expect(orderData.tokenId).toBe("5");
+			expect(orderData.makerAmount).toBe("21040000");
+			expect(orderData.takerAmount).toBe("11782400");
+			expect(orderData.side).toBe(Side.SELL);
+			expect(orderData.expiration).toBe("0");
+			expect(orderData.maxFee).toBe("0");
+			expect(orderData.timestamp).toBeDefined();
+			expect(orderData.builder).toBe(bytes32Zero);
+			expect(orderData.metadata).toBe(bytes32Zero);
+			expect(orderData.signatureType).toBe(SignatureTypeV2.POLY_PROXY);
 		});
 
 		it("0.001", async () => {
@@ -206,9 +186,6 @@ describe("buildOrderCreationArgs", () => {
 				price: 0.056,
 				size: 21.04,
 				side: Side.SELL,
-				feeRateBps: 0,
-				nonce: 0,
-				taker: "0x000000000000000000000000000000000000000A",
 			};
 			const orderData: OrderDataV2 = await buildOrderCreationArgs(
 				"0x0000000000000000000000000000000000000001",
@@ -217,19 +194,18 @@ describe("buildOrderCreationArgs", () => {
 				order,
 				ROUNDING_CONFIG["0.001"],
 			);
-			expect(orderData).toEqual({
-				maker: "0x0000000000000000000000000000000000000002",
-				taker: "0x000000000000000000000000000000000000000A",
-				tokenId: "5",
-				takerAmount: "1178240",
-				makerAmount: "21040000",
-				side: Side.SELL,
-				feeRateBps: "0",
-				nonce: "0",
-				signer: "0x0000000000000000000000000000000000000001",
-				expiration: "0",
-				signatureType: SignatureTypeV2.POLY_PROXY,
-			});
+			expect(orderData.maker).toBe("0x0000000000000000000000000000000000000002");
+			expect(orderData.signer).toBe("0x0000000000000000000000000000000000000001");
+			expect(orderData.tokenId).toBe("5");
+			expect(orderData.makerAmount).toBe("21040000");
+			expect(orderData.takerAmount).toBe("1178240");
+			expect(orderData.side).toBe(Side.SELL);
+			expect(orderData.expiration).toBe("0");
+			expect(orderData.maxFee).toBe("0");
+			expect(orderData.timestamp).toBeDefined();
+			expect(orderData.builder).toBe(bytes32Zero);
+			expect(orderData.metadata).toBe(bytes32Zero);
+			expect(orderData.signatureType).toBe(SignatureTypeV2.POLY_PROXY);
 		});
 
 		it("0.0001", async () => {
@@ -238,9 +214,6 @@ describe("buildOrderCreationArgs", () => {
 				price: 0.0056,
 				size: 21.04,
 				side: Side.SELL,
-				feeRateBps: 0,
-				nonce: 0,
-				taker: "0x000000000000000000000000000000000000000A",
 			};
 			const orderData: OrderDataV2 = await buildOrderCreationArgs(
 				"0x0000000000000000000000000000000000000001",
@@ -249,19 +222,18 @@ describe("buildOrderCreationArgs", () => {
 				order,
 				ROUNDING_CONFIG["0.0001"],
 			);
-			expect(orderData).toEqual({
-				maker: "0x0000000000000000000000000000000000000002",
-				taker: "0x000000000000000000000000000000000000000A",
-				tokenId: "5",
-				takerAmount: "117824",
-				makerAmount: "21040000",
-				side: Side.SELL,
-				feeRateBps: "0",
-				nonce: "0",
-				signer: "0x0000000000000000000000000000000000000001",
-				expiration: "0",
-				signatureType: SignatureTypeV2.POLY_PROXY,
-			});
+			expect(orderData.maker).toBe("0x0000000000000000000000000000000000000002");
+			expect(orderData.signer).toBe("0x0000000000000000000000000000000000000001");
+			expect(orderData.tokenId).toBe("5");
+			expect(orderData.makerAmount).toBe("21040000");
+			expect(orderData.takerAmount).toBe("117824");
+			expect(orderData.side).toBe(Side.SELL);
+			expect(orderData.expiration).toBe("0");
+			expect(orderData.maxFee).toBe("0");
+			expect(orderData.timestamp).toBeDefined();
+			expect(orderData.builder).toBe(bytes32Zero);
+			expect(orderData.metadata).toBe(bytes32Zero);
+			expect(orderData.signatureType).toBe(SignatureTypeV2.POLY_PROXY);
 		});
 	});
 
@@ -283,7 +255,9 @@ describe("buildOrderCreationArgs", () => {
 					order,
 					ROUNDING_CONFIG["0.1"],
 				);
-				expect(Number(orderData.makerAmount) / Number(orderData.takerAmount)).to.gte(0.5);
+				expect(
+					Number(orderData.makerAmount) / Number(orderData.takerAmount),
+				).toBeGreaterThanOrEqual(0.5);
 			});
 
 			it("correctly rounds price amounts for validity buy - 2", async () => {
@@ -300,9 +274,11 @@ describe("buildOrderCreationArgs", () => {
 					order,
 					ROUNDING_CONFIG["0.1"],
 				);
-				expect(orderData.makerAmount).to.equal("119000000");
-				expect(orderData.takerAmount).to.equal("170000000");
-				expect(Number(orderData.makerAmount) / Number(orderData.takerAmount)).to.gte(0.7);
+				expect(orderData.makerAmount).toBe("119000000");
+				expect(orderData.takerAmount).toBe("170000000");
+				expect(
+					Number(orderData.makerAmount) / Number(orderData.takerAmount),
+				).toBeGreaterThanOrEqual(0.7);
 			});
 
 			it("correctly rounds price amounts for validity buy - 3", async () => {
@@ -319,9 +295,11 @@ describe("buildOrderCreationArgs", () => {
 					order,
 					ROUNDING_CONFIG["0.1"],
 				);
-				expect(orderData.makerAmount).to.equal("80800000");
-				expect(orderData.takerAmount).to.equal("101000000");
-				expect(Number(orderData.makerAmount) / Number(orderData.takerAmount)).to.gte(0.8);
+				expect(orderData.makerAmount).toBe("80800000");
+				expect(orderData.takerAmount).toBe("101000000");
+				expect(
+					Number(orderData.makerAmount) / Number(orderData.takerAmount),
+				).toBeGreaterThanOrEqual(0.8);
 			});
 
 			it("correctly rounds price amounts for validity buy - 4", async () => {
@@ -338,9 +316,11 @@ describe("buildOrderCreationArgs", () => {
 					order,
 					ROUNDING_CONFIG["0.1"],
 				);
-				expect(orderData.makerAmount).to.equal("8974000");
-				expect(orderData.takerAmount).to.equal("12820000");
-				expect(Number(orderData.makerAmount) / Number(orderData.takerAmount)).to.gte(0.7);
+				expect(orderData.makerAmount).toBe("8974000");
+				expect(orderData.takerAmount).toBe("12820000");
+				expect(
+					Number(orderData.makerAmount) / Number(orderData.takerAmount),
+				).toBeGreaterThanOrEqual(0.7);
 			});
 
 			it("correctly rounds price amounts for validity buy - 5", async () => {
@@ -357,9 +337,11 @@ describe("buildOrderCreationArgs", () => {
 					order,
 					ROUNDING_CONFIG["0.1"],
 				);
-				expect(orderData.makerAmount).to.equal("730767000");
-				expect(orderData.takerAmount).to.equal("2435890000");
-				expect(Number(orderData.makerAmount) / Number(orderData.takerAmount)).to.gte(0.3);
+				expect(orderData.makerAmount).toBe("730767000");
+				expect(orderData.takerAmount).toBe("2435890000");
+				expect(
+					Number(orderData.makerAmount) / Number(orderData.takerAmount),
+				).toBeGreaterThanOrEqual(0.3);
 			});
 
 			it("correctly rounds price amounts for validity sell", async () => {
@@ -379,7 +361,7 @@ describe("buildOrderCreationArgs", () => {
 					order,
 					ROUNDING_CONFIG["0.1"],
 				);
-				expect(Number(orderData.takerAmount) / Number(orderData.makerAmount)).to.equal(0.5);
+				expect(Number(orderData.takerAmount) / Number(orderData.makerAmount)).toBe(0.5);
 			});
 
 			it("correctly rounds price amounts for validity sell - 2", async () => {
@@ -396,9 +378,11 @@ describe("buildOrderCreationArgs", () => {
 					order,
 					ROUNDING_CONFIG["0.1"],
 				);
-				expect(orderData.takerAmount).to.equal("119000000");
-				expect(orderData.makerAmount).to.equal("170000000");
-				expect(Number(orderData.makerAmount) / Number(orderData.takerAmount)).to.gte(0.7);
+				expect(orderData.takerAmount).toBe("119000000");
+				expect(orderData.makerAmount).toBe("170000000");
+				expect(
+					Number(orderData.makerAmount) / Number(orderData.takerAmount),
+				).toBeGreaterThanOrEqual(0.7);
 			});
 
 			it("correctly rounds price amounts for validity sell - 3", async () => {
@@ -415,9 +399,11 @@ describe("buildOrderCreationArgs", () => {
 					order,
 					ROUNDING_CONFIG["0.1"],
 				);
-				expect(orderData.makerAmount).to.equal("101000000");
-				expect(orderData.takerAmount).to.equal("80800000");
-				expect(Number(orderData.makerAmount) / Number(orderData.takerAmount)).to.gte(0.8);
+				expect(orderData.makerAmount).toBe("101000000");
+				expect(orderData.takerAmount).toBe("80800000");
+				expect(
+					Number(orderData.makerAmount) / Number(orderData.takerAmount),
+				).toBeGreaterThanOrEqual(0.8);
 			});
 
 			it("correctly rounds price amounts for validity sell - 4", async () => {
@@ -434,9 +420,11 @@ describe("buildOrderCreationArgs", () => {
 					order,
 					ROUNDING_CONFIG["0.1"],
 				);
-				expect(orderData.makerAmount).to.equal("12820000");
-				expect(orderData.takerAmount).to.equal("8974000");
-				expect(Number(orderData.takerAmount) / Number(orderData.makerAmount)).to.gte(0.7);
+				expect(orderData.makerAmount).toBe("12820000");
+				expect(orderData.takerAmount).toBe("8974000");
+				expect(
+					Number(orderData.takerAmount) / Number(orderData.makerAmount),
+				).toBeGreaterThanOrEqual(0.7);
 			});
 
 			it("correctly rounds price amounts for validity sell - 5", async () => {
@@ -453,9 +441,11 @@ describe("buildOrderCreationArgs", () => {
 					order,
 					ROUNDING_CONFIG["0.1"],
 				);
-				expect(orderData.makerAmount).to.equal("2435890000");
-				expect(orderData.takerAmount).to.equal("730767000");
-				expect(Number(orderData.takerAmount) / Number(orderData.makerAmount)).to.gte(0.3);
+				expect(orderData.makerAmount).toBe("2435890000");
+				expect(orderData.takerAmount).toBe("730767000");
+				expect(
+					Number(orderData.takerAmount) / Number(orderData.makerAmount),
+				).toBeGreaterThanOrEqual(0.3);
 			});
 		});
 
@@ -476,7 +466,9 @@ describe("buildOrderCreationArgs", () => {
 					order,
 					ROUNDING_CONFIG["0.01"],
 				);
-				expect(Number(orderData.makerAmount) / Number(orderData.takerAmount)).to.gte(0.56);
+				expect(
+					Number(orderData.makerAmount) / Number(orderData.takerAmount),
+				).toBeGreaterThanOrEqual(0.56);
 			});
 
 			it("correctly rounds price amounts for validity buy - 2", async () => {
@@ -493,9 +485,11 @@ describe("buildOrderCreationArgs", () => {
 					order,
 					ROUNDING_CONFIG["0.01"],
 				);
-				expect(orderData.makerAmount).to.equal("119000000");
-				expect(orderData.takerAmount).to.equal("170000000");
-				expect(Number(orderData.makerAmount) / Number(orderData.takerAmount)).to.gte(0.7);
+				expect(orderData.makerAmount).toBe("119000000");
+				expect(orderData.takerAmount).toBe("170000000");
+				expect(
+					Number(orderData.makerAmount) / Number(orderData.takerAmount),
+				).toBeGreaterThanOrEqual(0.7);
 			});
 
 			it("correctly rounds price amounts for validity buy - 3", async () => {
@@ -512,9 +506,11 @@ describe("buildOrderCreationArgs", () => {
 					order,
 					ROUNDING_CONFIG["0.01"],
 				);
-				expect(orderData.makerAmount).to.equal("82820000");
-				expect(orderData.takerAmount).to.equal("101000000");
-				expect(Number(orderData.makerAmount) / Number(orderData.takerAmount)).to.gte(0.82);
+				expect(orderData.makerAmount).toBe("82820000");
+				expect(orderData.takerAmount).toBe("101000000");
+				expect(
+					Number(orderData.makerAmount) / Number(orderData.takerAmount),
+				).toBeGreaterThanOrEqual(0.82);
 			});
 
 			it("correctly rounds price amounts for validity buy - 4", async () => {
@@ -531,9 +527,11 @@ describe("buildOrderCreationArgs", () => {
 					order,
 					ROUNDING_CONFIG["0.01"],
 				);
-				expect(orderData.makerAmount).to.equal("9999600");
-				expect(orderData.takerAmount).to.equal("12820000");
-				expect(Number(orderData.makerAmount) / Number(orderData.takerAmount)).to.gte(0.78);
+				expect(orderData.makerAmount).toBe("9999600");
+				expect(orderData.takerAmount).toBe("12820000");
+				expect(
+					Number(orderData.makerAmount) / Number(orderData.takerAmount),
+				).toBeGreaterThanOrEqual(0.78);
 			});
 
 			it("correctly rounds price amounts for validity buy - 5", async () => {
@@ -550,9 +548,11 @@ describe("buildOrderCreationArgs", () => {
 					order,
 					ROUNDING_CONFIG["0.01"],
 				);
-				expect(orderData.makerAmount).to.equal("949997100");
-				expect(orderData.takerAmount).to.equal("2435890000");
-				expect(Number(orderData.makerAmount) / Number(orderData.takerAmount)).to.gte(0.39);
+				expect(orderData.makerAmount).toBe("949997100");
+				expect(orderData.takerAmount).toBe("2435890000");
+				expect(
+					Number(orderData.makerAmount) / Number(orderData.takerAmount),
+				).toBeGreaterThanOrEqual(0.39);
 			});
 
 			it("correctly rounds price amounts for validity sell", async () => {
@@ -572,9 +572,7 @@ describe("buildOrderCreationArgs", () => {
 					order,
 					ROUNDING_CONFIG["0.01"],
 				);
-				expect(Number(orderData.takerAmount) / Number(orderData.makerAmount)).to.equal(
-					0.56,
-				);
+				expect(Number(orderData.takerAmount) / Number(orderData.makerAmount)).toBe(0.56);
 			});
 
 			it("correctly rounds price amounts for validity sell - 2", async () => {
@@ -591,9 +589,11 @@ describe("buildOrderCreationArgs", () => {
 					order,
 					ROUNDING_CONFIG["0.01"],
 				);
-				expect(orderData.takerAmount).to.equal("119000000");
-				expect(orderData.makerAmount).to.equal("170000000");
-				expect(Number(orderData.makerAmount) / Number(orderData.takerAmount)).to.gte(0.7);
+				expect(orderData.takerAmount).toBe("119000000");
+				expect(orderData.makerAmount).toBe("170000000");
+				expect(
+					Number(orderData.makerAmount) / Number(orderData.takerAmount),
+				).toBeGreaterThanOrEqual(0.7);
 			});
 
 			it("correctly rounds price amounts for validity sell - 3", async () => {
@@ -610,9 +610,11 @@ describe("buildOrderCreationArgs", () => {
 					order,
 					ROUNDING_CONFIG["0.01"],
 				);
-				expect(orderData.makerAmount).to.equal("101000000");
-				expect(orderData.takerAmount).to.equal("82820000");
-				expect(Number(orderData.makerAmount) / Number(orderData.takerAmount)).to.gte(0.82);
+				expect(orderData.makerAmount).toBe("101000000");
+				expect(orderData.takerAmount).toBe("82820000");
+				expect(
+					Number(orderData.makerAmount) / Number(orderData.takerAmount),
+				).toBeGreaterThanOrEqual(0.82);
 			});
 
 			it("correctly rounds price amounts for validity sell - 4", async () => {
@@ -629,9 +631,11 @@ describe("buildOrderCreationArgs", () => {
 					order,
 					ROUNDING_CONFIG["0.01"],
 				);
-				expect(orderData.makerAmount).to.equal("12820000");
-				expect(orderData.takerAmount).to.equal("9999600");
-				expect(Number(orderData.takerAmount) / Number(orderData.makerAmount)).to.gte(0.78);
+				expect(orderData.makerAmount).toBe("12820000");
+				expect(orderData.takerAmount).toBe("9999600");
+				expect(
+					Number(orderData.takerAmount) / Number(orderData.makerAmount),
+				).toBeGreaterThanOrEqual(0.78);
 			});
 
 			it("correctly rounds price amounts for validity sell - 5", async () => {
@@ -648,9 +652,11 @@ describe("buildOrderCreationArgs", () => {
 					order,
 					ROUNDING_CONFIG["0.01"],
 				);
-				expect(orderData.makerAmount).to.equal("2435890000");
-				expect(orderData.takerAmount).to.equal("949997100");
-				expect(Number(orderData.takerAmount) / Number(orderData.makerAmount)).to.gte(0.39);
+				expect(orderData.makerAmount).toBe("2435890000");
+				expect(orderData.takerAmount).toBe("949997100");
+				expect(
+					Number(orderData.takerAmount) / Number(orderData.makerAmount),
+				).toBeGreaterThanOrEqual(0.39);
 			});
 		});
 
@@ -671,7 +677,9 @@ describe("buildOrderCreationArgs", () => {
 					order,
 					ROUNDING_CONFIG["0.001"],
 				);
-				expect(Number(orderData.makerAmount) / Number(orderData.takerAmount)).to.gte(0.056);
+				expect(
+					Number(orderData.makerAmount) / Number(orderData.takerAmount),
+				).toBeGreaterThanOrEqual(0.056);
 			});
 
 			it("correctly rounds price amounts for validity buy - 2", async () => {
@@ -688,9 +696,11 @@ describe("buildOrderCreationArgs", () => {
 					order,
 					ROUNDING_CONFIG["0.001"],
 				);
-				expect(orderData.makerAmount).to.equal("1190000");
-				expect(orderData.takerAmount).to.equal("170000000");
-				expect(Number(orderData.makerAmount) / Number(orderData.takerAmount)).to.gte(0.007);
+				expect(orderData.makerAmount).toBe("1190000");
+				expect(orderData.takerAmount).toBe("170000000");
+				expect(
+					Number(orderData.makerAmount) / Number(orderData.takerAmount),
+				).toBeGreaterThanOrEqual(0.007);
 			});
 
 			it("correctly rounds price amounts for validity buy - 3", async () => {
@@ -707,9 +717,11 @@ describe("buildOrderCreationArgs", () => {
 					order,
 					ROUNDING_CONFIG["0.001"],
 				);
-				expect(orderData.makerAmount).to.equal("8282000");
-				expect(orderData.takerAmount).to.equal("101000000");
-				expect(Number(orderData.makerAmount) / Number(orderData.takerAmount)).to.gte(0.082);
+				expect(orderData.makerAmount).toBe("8282000");
+				expect(orderData.takerAmount).toBe("101000000");
+				expect(
+					Number(orderData.makerAmount) / Number(orderData.takerAmount),
+				).toBeGreaterThanOrEqual(0.082);
 			});
 
 			it("correctly rounds price amounts for validity buy - 4", async () => {
@@ -726,9 +738,11 @@ describe("buildOrderCreationArgs", () => {
 					order,
 					ROUNDING_CONFIG["0.001"],
 				);
-				expect(orderData.makerAmount).to.equal("999960");
-				expect(orderData.takerAmount).to.equal("12820000");
-				expect(Number(orderData.makerAmount) / Number(orderData.takerAmount)).to.gte(0.078);
+				expect(orderData.makerAmount).toBe("999960");
+				expect(orderData.takerAmount).toBe("12820000");
+				expect(
+					Number(orderData.makerAmount) / Number(orderData.takerAmount),
+				).toBeGreaterThanOrEqual(0.078);
 			});
 
 			it("correctly rounds price amounts for validity buy - 5", async () => {
@@ -745,9 +759,11 @@ describe("buildOrderCreationArgs", () => {
 					order,
 					ROUNDING_CONFIG["0.001"],
 				);
-				expect(orderData.makerAmount).to.equal("94999710");
-				expect(orderData.takerAmount).to.equal("2435890000");
-				expect(Number(orderData.makerAmount) / Number(orderData.takerAmount)).to.gte(0.039);
+				expect(orderData.makerAmount).toBe("94999710");
+				expect(orderData.takerAmount).toBe("2435890000");
+				expect(
+					Number(orderData.makerAmount) / Number(orderData.takerAmount),
+				).toBeGreaterThanOrEqual(0.039);
 			});
 
 			it("correctly rounds price amounts for validity sell", async () => {
@@ -767,9 +783,7 @@ describe("buildOrderCreationArgs", () => {
 					order,
 					ROUNDING_CONFIG["0.001"],
 				);
-				expect(Number(orderData.takerAmount) / Number(orderData.makerAmount)).to.equal(
-					0.056,
-				);
+				expect(Number(orderData.takerAmount) / Number(orderData.makerAmount)).toBe(0.056);
 			});
 
 			it("correctly rounds price amounts for validity sell - 2", async () => {
@@ -786,9 +800,11 @@ describe("buildOrderCreationArgs", () => {
 					order,
 					ROUNDING_CONFIG["0.001"],
 				);
-				expect(orderData.takerAmount).to.equal("1190000");
-				expect(orderData.makerAmount).to.equal("170000000");
-				expect(Number(orderData.makerAmount) / Number(orderData.takerAmount)).to.gte(0.007);
+				expect(orderData.takerAmount).toBe("1190000");
+				expect(orderData.makerAmount).toBe("170000000");
+				expect(
+					Number(orderData.makerAmount) / Number(orderData.takerAmount),
+				).toBeGreaterThanOrEqual(0.007);
 			});
 
 			it("correctly rounds price amounts for validity sell - 3", async () => {
@@ -805,9 +821,11 @@ describe("buildOrderCreationArgs", () => {
 					order,
 					ROUNDING_CONFIG["0.001"],
 				);
-				expect(orderData.makerAmount).to.equal("101000000");
-				expect(orderData.takerAmount).to.equal("8282000");
-				expect(Number(orderData.makerAmount) / Number(orderData.takerAmount)).to.gte(0.082);
+				expect(orderData.makerAmount).toBe("101000000");
+				expect(orderData.takerAmount).toBe("8282000");
+				expect(
+					Number(orderData.makerAmount) / Number(orderData.takerAmount),
+				).toBeGreaterThanOrEqual(0.082);
 			});
 
 			it("correctly rounds price amounts for validity sell - 4", async () => {
@@ -824,9 +842,11 @@ describe("buildOrderCreationArgs", () => {
 					order,
 					ROUNDING_CONFIG["0.001"],
 				);
-				expect(orderData.makerAmount).to.equal("12820000");
-				expect(orderData.takerAmount).to.equal("999960");
-				expect(Number(orderData.takerAmount) / Number(orderData.makerAmount)).to.gte(0.078);
+				expect(orderData.makerAmount).toBe("12820000");
+				expect(orderData.takerAmount).toBe("999960");
+				expect(
+					Number(orderData.takerAmount) / Number(orderData.makerAmount),
+				).toBeGreaterThanOrEqual(0.078);
 			});
 
 			it("correctly rounds price amounts for validity sell - 5", async () => {
@@ -843,9 +863,11 @@ describe("buildOrderCreationArgs", () => {
 					order,
 					ROUNDING_CONFIG["0.001"],
 				);
-				expect(orderData.makerAmount).to.equal("2435890000");
-				expect(orderData.takerAmount).to.equal("94999710");
-				expect(Number(orderData.takerAmount) / Number(orderData.makerAmount)).to.gte(0.039);
+				expect(orderData.makerAmount).toBe("2435890000");
+				expect(orderData.takerAmount).toBe("94999710");
+				expect(
+					Number(orderData.takerAmount) / Number(orderData.makerAmount),
+				).toBeGreaterThanOrEqual(0.039);
 			});
 		});
 
@@ -866,9 +888,9 @@ describe("buildOrderCreationArgs", () => {
 					order,
 					ROUNDING_CONFIG["0.0001"],
 				);
-				expect(Number(orderData.makerAmount) / Number(orderData.takerAmount)).to.gte(
-					0.0056,
-				);
+				expect(
+					Number(orderData.makerAmount) / Number(orderData.takerAmount),
+				).toBeGreaterThanOrEqual(0.0056);
 			});
 
 			it("correctly rounds price amounts for validity buy - 2", async () => {
@@ -885,11 +907,11 @@ describe("buildOrderCreationArgs", () => {
 					order,
 					ROUNDING_CONFIG["0.0001"],
 				);
-				expect(orderData.makerAmount).to.equal("119000");
-				expect(orderData.takerAmount).to.equal("170000000");
-				expect(Number(orderData.makerAmount) / Number(orderData.takerAmount)).to.gte(
-					0.0007,
-				);
+				expect(orderData.makerAmount).toBe("119000");
+				expect(orderData.takerAmount).toBe("170000000");
+				expect(
+					Number(orderData.makerAmount) / Number(orderData.takerAmount),
+				).toBeGreaterThanOrEqual(0.0007);
 			});
 
 			it("correctly rounds price amounts for validity buy - 3", async () => {
@@ -906,11 +928,11 @@ describe("buildOrderCreationArgs", () => {
 					order,
 					ROUNDING_CONFIG["0.0001"],
 				);
-				expect(orderData.makerAmount).to.equal("828200");
-				expect(orderData.takerAmount).to.equal("101000000");
-				expect(Number(orderData.makerAmount) / Number(orderData.takerAmount)).to.gte(
-					0.0082,
-				);
+				expect(orderData.makerAmount).toBe("828200");
+				expect(orderData.takerAmount).toBe("101000000");
+				expect(
+					Number(orderData.makerAmount) / Number(orderData.takerAmount),
+				).toBeGreaterThanOrEqual(0.0082);
 			});
 
 			it("correctly rounds price amounts for validity buy - 4", async () => {
@@ -927,11 +949,11 @@ describe("buildOrderCreationArgs", () => {
 					order,
 					ROUNDING_CONFIG["0.0001"],
 				);
-				expect(orderData.makerAmount).to.equal("99996");
-				expect(orderData.takerAmount).to.equal("12820000");
-				expect(Number(orderData.makerAmount) / Number(orderData.takerAmount)).to.gte(
-					0.0078,
-				);
+				expect(orderData.makerAmount).toBe("99996");
+				expect(orderData.takerAmount).toBe("12820000");
+				expect(
+					Number(orderData.makerAmount) / Number(orderData.takerAmount),
+				).toBeGreaterThanOrEqual(0.0078);
 			});
 
 			it("correctly rounds price amounts for validity buy - 5", async () => {
@@ -948,11 +970,11 @@ describe("buildOrderCreationArgs", () => {
 					order,
 					ROUNDING_CONFIG["0.0001"],
 				);
-				expect(orderData.makerAmount).to.equal("9499971");
-				expect(orderData.takerAmount).to.equal("2435890000");
-				expect(Number(orderData.makerAmount) / Number(orderData.takerAmount)).to.gte(
-					0.0039,
-				);
+				expect(orderData.makerAmount).toBe("9499971");
+				expect(orderData.takerAmount).toBe("2435890000");
+				expect(
+					Number(orderData.makerAmount) / Number(orderData.takerAmount),
+				).toBeGreaterThanOrEqual(0.0039);
 			});
 
 			it("correctly rounds price amounts for validity sell", async () => {
@@ -972,9 +994,7 @@ describe("buildOrderCreationArgs", () => {
 					order,
 					ROUNDING_CONFIG["0.0001"],
 				);
-				expect(Number(orderData.takerAmount) / Number(orderData.makerAmount)).to.equal(
-					0.0056,
-				);
+				expect(Number(orderData.takerAmount) / Number(orderData.makerAmount)).toBe(0.0056);
 			});
 
 			it("correctly rounds price amounts for validity sell - 2", async () => {
@@ -991,11 +1011,11 @@ describe("buildOrderCreationArgs", () => {
 					order,
 					ROUNDING_CONFIG["0.0001"],
 				);
-				expect(orderData.takerAmount).to.equal("119000");
-				expect(orderData.makerAmount).to.equal("170000000");
-				expect(Number(orderData.makerAmount) / Number(orderData.takerAmount)).to.gte(
-					0.0007,
-				);
+				expect(orderData.takerAmount).toBe("119000");
+				expect(orderData.makerAmount).toBe("170000000");
+				expect(
+					Number(orderData.makerAmount) / Number(orderData.takerAmount),
+				).toBeGreaterThanOrEqual(0.0007);
 			});
 
 			it("correctly rounds price amounts for validity sell - 3", async () => {
@@ -1012,11 +1032,11 @@ describe("buildOrderCreationArgs", () => {
 					order,
 					ROUNDING_CONFIG["0.0001"],
 				);
-				expect(orderData.makerAmount).to.equal("101000000");
-				expect(orderData.takerAmount).to.equal("828200");
-				expect(Number(orderData.makerAmount) / Number(orderData.takerAmount)).to.gte(
-					0.0082,
-				);
+				expect(orderData.makerAmount).toBe("101000000");
+				expect(orderData.takerAmount).toBe("828200");
+				expect(
+					Number(orderData.makerAmount) / Number(orderData.takerAmount),
+				).toBeGreaterThanOrEqual(0.0082);
 			});
 
 			it("correctly rounds price amounts for validity sell - 4", async () => {
@@ -1033,11 +1053,11 @@ describe("buildOrderCreationArgs", () => {
 					order,
 					ROUNDING_CONFIG["0.0001"],
 				);
-				expect(orderData.makerAmount).to.equal("12820000");
-				expect(orderData.takerAmount).to.equal("99996");
-				expect(Number(orderData.takerAmount) / Number(orderData.makerAmount)).to.gte(
-					0.0078,
-				);
+				expect(orderData.makerAmount).toBe("12820000");
+				expect(orderData.takerAmount).toBe("99996");
+				expect(
+					Number(orderData.takerAmount) / Number(orderData.makerAmount),
+				).toBeGreaterThanOrEqual(0.0078);
 			});
 
 			it("correctly rounds price amounts for validity sell - 5", async () => {
@@ -1054,11 +1074,11 @@ describe("buildOrderCreationArgs", () => {
 					order,
 					ROUNDING_CONFIG["0.0001"],
 				);
-				expect(orderData.makerAmount).to.equal("2435890000");
-				expect(orderData.takerAmount).to.equal("9499971");
-				expect(Number(orderData.takerAmount) / Number(orderData.makerAmount)).to.gte(
-					0.0039,
-				);
+				expect(orderData.makerAmount).toBe("2435890000");
+				expect(orderData.takerAmount).toBe("9499971");
+				expect(
+					Number(orderData.takerAmount) / Number(orderData.makerAmount),
+				).toBeGreaterThanOrEqual(0.0039);
 			});
 		});
 	});

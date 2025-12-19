@@ -3,20 +3,14 @@ import type { Wallet } from "@ethersproject/wallet";
 import { hashTypedData } from "viem";
 
 import { bytes32Zero } from "../constants";
-
-import { EIP712_DOMAIN, type EIP712TypedData } from "./model/eip712";
 import {
 	CTF_EXCHANGE_V2_DOMAIN_NAME,
 	CTF_EXCHANGE_V2_DOMAIN_VERSION,
 	CTF_EXCHANGE_V2_ORDER_STRUCT,
 } from "./model/ctfExchangeV2TypedData";
-import type {
-	OrderDataV2,
-	OrderHash,
-	OrderSignature,
-	OrderV2,
-	SignedOrderV2,
-} from "./model/orderDataV2.js";
+import { EIP712_DOMAIN, type EIP712TypedData } from "./model/eip712";
+import type { OrderHash, OrderSignature } from "./model/order";
+import type { OrderDataV2, OrderV2, SignedOrderV2 } from "./model/orderDataV2.js";
 import { SignatureTypeV2 } from "./model/signatureTypeV2.js";
 import { generateOrderSalt } from "./utils";
 
@@ -85,7 +79,7 @@ export class ExchangeOrderBuilderV2 {
 			metadata: metadata ?? bytes32Zero,
 			builder: builder ?? bytes32Zero,
 			maxFee: maxFee ?? "0",
-			timestamp: timestamp ?? (Date.now() / 1000).toString(),
+			timestamp: timestamp ?? Math.floor(Date.now() / 1000).toString(),
 		};
 	}
 
@@ -132,11 +126,7 @@ export class ExchangeOrderBuilderV2 {
 	 */
 	buildOrderSignature(typedData: EIP712TypedData): Promise<OrderSignature> {
 		delete typedData.types.EIP712Domain;
-		return this.signer._signTypedData(
-			typedData.domain,
-			typedData.types,
-			typedData.message,
-		);
+		return this.signer._signTypedData(typedData.domain, typedData.types, typedData.message);
 	}
 
 	/**
