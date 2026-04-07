@@ -84,6 +84,10 @@ export interface OpenOrder {
 
 export type OpenOrdersResponse = OpenOrder[];
 
+export type PreMigrationOrder = OpenOrder;
+
+export type PreMigrationOrdersResponse = PreMigrationOrder[];
+
 export interface MakerOrder {
 	order_id: string;
 	owner: string;
